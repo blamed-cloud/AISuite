@@ -15,7 +15,7 @@ class Player:
 	def is_human(self):
 		return self.human
 		
-	def choose_move(self, game_class, game_state)
+	def choose_move(self, game)
 		pass
 
 		
@@ -24,20 +24,18 @@ class Human(Player):
 	def __init__(self):
 		self.human = True
 
-	def choose_move(self, game_class, game_state = "")
-		return prgm_lib.get_str_escape_codes(game_class.escapes)
+	def choose_move(self, game)
+		return prgm_lib.get_str_escape_codes(game.escapes)
 		
 
-#needs to be more general	
+#good	
 class RandomAI(Player):
 	def __init__(self):
 		self.human = False
 		
-	def choose_board(self, game):
-		return random.randint(0,8)
-		
-	def choose_square(self, game):
-		return random.randint(0,8)
+	def choose_move(self, game):
+		moves = game.get_child_moves()
+		return random.choice(moves)
 
 
 
@@ -47,8 +45,8 @@ class AI_ABPruning(Player):
 		self.heuristic = heuristic_func
 		self.print_depth = show_thought_level
 		
-	def choose_moves(self, game_class, game_state):
-		tree = alphabeta.ABPruning_Tree(game_class, game_state, DEFAULT_DEPTH, LOWER_BOUND, UPPER_BOUND, self.heuristic, self.print_depth)
+	def choose_moves(self, game_class, game):
+		tree = alphabeta.ABPruning_Tree(game, DEFAULT_DEPTH, LOWER_BOUND, UPPER_BOUND, self.heuristic, game.get_player_num() == 1, self.print_depth)
 		tree.search()
 		child = tree.get_best_child()
 		return child
