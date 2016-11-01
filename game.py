@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+#game.py
 
 #base class for your game_class that you make
 class Game:
