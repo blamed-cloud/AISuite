@@ -49,7 +49,7 @@ class ABPruning_Tree:
 		self.game = game
 		
 	def set_children(self):
-		self.children = game.get_children_states()
+		self.children = game.get_child_states()
 		
 	def is_terminal_node(self):
 		return game.is_game_over()

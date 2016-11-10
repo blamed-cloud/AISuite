@@ -59,6 +59,7 @@ class Game:
 	#returns the number of the current player (1 or 2 by default)
 	#get_player_num : Game -> Int
 	def get_player_num(self):
+	### required by player.py ###
 		return (self.turn % self.num_players) + 1
 		
 	#standard python __repr__() function
@@ -69,14 +70,13 @@ class Game:
 	#returns True if the game is over
 	#is_game_over : Game -> Bool
 	def is_game_over(self):
+	### required by alphabeta.py ###
 		return self.winner != -1
 		
 	#method to play the game, if you look closely,
 	#the do_turn method actually does all the work, have fun.
 	#play : Game -> Int
 	def play(self):
-#		if self.history:
-#			self.save_state(self.game_file)
 		while self.winner == -1:
 			self.do_turn()
 		if not self.quiet:
@@ -96,6 +96,7 @@ class Game:
 	#string, henceforth known as a Game_State
 	#__str__ : Game -> Game_State
 	def __str__(self):
+	### required by alphabeta.py ###
 		pass
 			
 	#should return a list containing the possible game_states
@@ -103,6 +104,7 @@ class Game:
 	#NOTE: you should use __str__ to create the game_states.
 	#get_child_states : Game -> [Game_State]
 	def get_child_states(self):
+	### required by alphabeta.py ###
 		pass
 		
 	#similar to the previous method, except returns a valid move for your game.
@@ -110,9 +112,22 @@ class Game:
 	#and is returned from Player.choose_move
 	#get_child_moves : Game -> [Move]
 	def get_child_moves(self):
+	### required by player.py ###
 		pass
 	
 	#this is where the magic happens.
+	#things to do in this method (your needs may vary):
+	#	-print the board (possibly only if the current player is human):
+	#		human = self.is_human_turn()
+	#		if human:
+	#			self.opg()
+	#	-print stuff for the human
+	#		if human:
+	#			print <information on playing your turn>
+	#	-get the move:
+	#		move = self.current_player().choose_move(self)
+	#	-check if the move returned is valid, and if it is, update any
+	#	 state variables that need to change (such as the turn counter)
 	def do_turn(self):
 		pass
 		
@@ -121,6 +136,7 @@ class Game:
 	#class's __init__ needs
 	#make_new_instance : Game -> Game
 	def make_new_instance(self):
+	### required by alphabeta.py ###
 		pass
 
 	#essentially the inverse of the __str__ operation
@@ -128,6 +144,7 @@ class Game:
 	#game class to match.
 	#load_state_from_string : Game x Game_State -> _
 	def load_state_from_string(self, state):
+	### required by alphabeta.py ###
 		pass
 		
 	#method for showing the game to the user.

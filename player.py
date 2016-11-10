@@ -54,10 +54,17 @@ class AI_ABPruning(Player):
 		self.depth = depth_lim
 		self.up = upper_bound
 		self.low = lower_bound
+		self.set_vol = False
+		self.vol_func = None
 		
+	def set_volatility_func(self, vol)
+		self.set_vol = True
+		self.vol_func = vol		
 	
 	def choose_moves(self, game_class, game):
 		tree = alphabeta.ABPruning_Tree(game, self.depth, self.low, self.up, self.heuristic, game.get_player_num() == 1, self.print_depth)
+		if self.set_vol:
+			tree.set_volatility_measure(self.vol_func)
 		tree.search()
 		child = tree.get_best_child()
 		return child
