@@ -19,7 +19,7 @@ class Player:
 		
 	#method to choose a move for the game.
 	#choose_move : Game -> Move
-	def choose_move(self, game)
+	def choose_move(self, game):
 		pass
 
 		
