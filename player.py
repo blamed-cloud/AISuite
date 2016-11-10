@@ -8,7 +8,7 @@ from alphabeta import UPPER_BOUND
 from alphabeta import LOWER_BOUND
 
 #base player class
-class Player:
+class Player(object):
 	def __init__(self):
 		self.human = False
 

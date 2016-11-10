@@ -25,7 +25,7 @@ def default_volatility_measure(game):
 
 #make more general, consider removing printing, or moving to two classes, one with printing, one without.
 #also, work with pickle for game_states and such.
-class ABPruning_Tree:
+class ABPruning_Tree(object):
 	def __init__(self, game, depth_lim = DEFAULT_DEPTH, A = LOWER_BOUND, B = UPPER_BOUND, heuristic = None, i_am_max = True, p_depth = 0):
 		self.game = game
 		self.children = []

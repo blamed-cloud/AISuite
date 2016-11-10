@@ -2,7 +2,7 @@
 #game.py
 
 #base class for your game_class that you make
-class Game:
+class Game(object):
 	#class-specific escape codes for user-input
 	escapes = [":w", ":q", ":wq", ":r"]
 	
