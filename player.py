@@ -30,7 +30,7 @@ class Human(Player):
 		self.human = True
 
 	#uses terminal user input, may or may not be desirable
-	def choose_move(self, game)
+	def choose_move(self, game):
 		return prgm_lib.get_str_escape_codes(game.escapes)
 		
 
@@ -57,7 +57,7 @@ class AI_ABPruning(Player):
 		self.set_vol = False
 		self.vol_func = None
 		
-	def set_volatility_func(self, vol)
+	def set_volatility_func(self, vol):
 		self.set_vol = True
 		self.vol_func = vol		
 	
