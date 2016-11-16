@@ -53,7 +53,7 @@ class ABPruning_Tree_Test(object):
 		self.game = game
 		
 	def set_children(self):
-		self.children = {x:None for x in game.get_child_states()}
+		self.children = {x:None for x in self.game.get_child_states()}
 		
 	def get_child_tree_by_state(self, child_state):
 		t = self
@@ -84,7 +84,7 @@ class ABPruning_Tree_Test(object):
 				self.value = UPPER_BOUND
 			for child_state in self.children:
 				if self.children[child_state] == None:
-					baby = game.make_new_instance()
+					baby = self.game.make_new_instance()
 					baby.load_state_from_string(child_state)
 					child = ABPruning_Tree(baby, self.depth_limit-1, self.alpha, self.beta, self.evaluate, not self.is_max)
 					child.set_volatility_measure(self.is_volatile)
@@ -132,10 +132,10 @@ class ABPruning_Tree(object):
 		self.game = game
 		
 	def set_children(self):
-		self.children = game.get_child_states()
+		self.children = self.game.get_child_states()
 		
 	def is_terminal_node(self):
-		return game.is_game_over()
+		return self.game.is_game_over()
 		
 	def get_best_child(self):
 		value = []
@@ -158,7 +158,7 @@ class ABPruning_Tree(object):
 			if self.is_max:
 				self.value = LOWER_BOUND
 				for child_state in self.children:
-					baby = game.make_new_instance()
+					baby = self.game.make_new_instance()
 					baby.load_state_from_string(child_state)
 					child = ABPruning_Tree(baby, self.depth_limit-1, self.alpha, self.beta, self.evaluate, not self.is_max, self.print_depth)
 					child.set_volatility_measure(self.is_volatile)
@@ -185,7 +185,7 @@ class ABPruning_Tree(object):
 			else:
 				self.value = UPPER_BOUND
 				for child_state in self.children:
-					baby = game.make_new_instance()
+					baby = self.game.make_new_instance()
 					baby.load_state_from_string(child_state)
 					child = ABPruning_Tree(baby, self.depth_limit-1, self.alpha, self.beta, self.evaluate, not self.is_max, self.print_depth)
 					child.set_volatility_measure(self.is_volatile)
