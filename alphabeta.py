@@ -23,6 +23,88 @@ ORDER_FREE = 2
 def default_volatility_measure(game):
 	return False
 
+class ABPruning_Tree_Test(object):
+	def __init__(self, game, depth_lim = DEFAULT_DEPTH, A = LOWER_BOUND, B = UPPER_BOUND, heuristic = None, i_am_max = True):
+		self.game = game
+		self.children = {}
+		self.best_child = [["",-1,-1]]
+		self.alpha = A
+		self.beta = B
+		self.depth_limit = depth_lim
+		self.evaluate = heuristic
+		self.is_volatile = default_volatility_measure
+		self.value = 0
+		self.is_max = i_am_max
+		self.have_children = False
+		
+	def re_init(self, depth, A, B):
+		self.depth_limit = depth
+		self.alpha = A
+		self.beta = B
+		
+	def set_heuristic(self, heuristic):
+		self.evaluate = heuristic
+		
+	def set_volatility_measure(self, vol):
+		self.is_volatile = vol
+		
+	def set_game(self, game):
+		self.game = game
+		
+	def set_children(self):
+		self.children = {x:None for x in game.get_child_states()}
+		
+	def get_child_tree_by_state(self, child_state):
+		t = self
+		if child_state in self.children:
+			t = self.children[child_state]
+		return t
+		
+	def is_terminal_node(self):
+		return game.is_game_over()
+		
+	def get_best_child(self):
+		value = []
+		if len(self.best_child)==1:
+			value = self.best_child[0]
+		else:
+			size = len(self.best_child)-1
+			value = self.best_child[random.randint(0,size)]
+		return value
+		
+	def search(self):
+		if (self.depth_limit <= 0 and not self.is_volatile(self.state)) or (self.depth_limit == VOLATILE_DEPTH) or self.is_terminal_node():
+			self.value = self.evaluate(self.state)
+		else:
+			self.set_children()
+			if self.is_max:
+				self.value = LOWER_BOUND
+			else:
+				self.value = UPPER_BOUND
+			for child_state in self.children:
+				if self.children[child_state] == None:
+					baby = game.make_new_instance()
+					baby.load_state_from_string(child_state)
+					child = ABPruning_Tree(baby, self.depth_limit-1, self.alpha, self.beta, self.evaluate, not self.is_max)
+					child.set_volatility_measure(self.is_volatile)
+					self.children[child_state] = child
+				else:
+					self.children[child_state].re_init(self.depth_limit-1, self.alpha, self.beta)
+				child_value = child.search()
+				if (self.is_max and child_value > self.value) or (not self.is_max and child_value < self.value):
+					self.best_child = [child_state]
+				elif child_value == self.value:
+					self.best_child += [child_state]
+				if self.is_max:
+					self.value = max(self.value, child_value)
+					self.alpha = max(self.alpha, self.value)
+				else:
+					self.value = min(self.value, child_value)
+					self.beta = min(self.beta, self.value)
+				if self.beta < self.alpha:
+					break
+		return self.value
+
 #make more general, consider removing printing, or moving to two classes, one with printing, one without.
 #also, work with pickle for game_states and such.
 class ABPruning_Tree(object):
