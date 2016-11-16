@@ -41,6 +41,7 @@ class ABPruning_Tree_Test(object):
 		self.depth_limit = depth
 		self.alpha = A
 		self.beta = B
+		self.value = 0
 		
 	def set_heuristic(self, heuristic):
 		self.evaluate = heuristic
@@ -90,7 +91,7 @@ class ABPruning_Tree_Test(object):
 					self.children[child_state] = child
 				else:
 					self.children[child_state].re_init(self.depth_limit-1, self.alpha, self.beta)
-				child_value = child.search()
+				child_value = self.children[child_state].search()
 				if (self.is_max and child_value > self.value) or (not self.is_max and child_value < self.value):
 					self.best_child = [child_state]
 				elif child_value == self.value:
