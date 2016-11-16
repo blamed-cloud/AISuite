@@ -62,7 +62,7 @@ class ABPruning_Tree_Test(object):
 		return t
 		
 	def is_terminal_node(self):
-		return game.is_game_over()
+		return self.game.is_game_over()
 		
 	def get_best_child(self):
 		value = []
