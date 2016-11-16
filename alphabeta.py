@@ -27,6 +27,7 @@ class ABPruning_Tree_Test(object):
 	def __init__(self, game, depth_lim = DEFAULT_DEPTH, A = LOWER_BOUND, B = UPPER_BOUND, heuristic = None, i_am_max = True):
 		self.game = game
 		self.children = {}
+		self.child_moves = {}
 		self.best_child = [["",-1,-1]]
 		self.alpha = A
 		self.beta = B
@@ -53,6 +54,8 @@ class ABPruning_Tree_Test(object):
 		self.game = game
 		
 	def set_children(self):
+		# self.child_moves = {}
+		# need to get the actual move so that we can return that, not the state.
 		self.children = {x:None for x in self.game.get_child_states()}
 		
 	def get_child_tree_by_state(self, child_state):
