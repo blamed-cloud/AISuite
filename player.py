@@ -71,8 +71,8 @@ class AI_ABPruning(Player):
 			self.tree = self.tree.get_child_tree_by_state(str(game))
 			self.tree.re_init(self.depth, self.low, self.up)
 		self.tree.search()
-		child = self.tree.get_best_child()
-		self.tree = self.tree.get_child_tree_by_state(child)
-		return child
+		child_pair = self.tree.get_best_child_pair()
+		self.tree = self.tree.get_child_tree_by_state(child_pair[0])
+		return child_pair[1]
 
 

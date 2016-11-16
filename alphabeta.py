@@ -28,7 +28,7 @@ class ABPruning_Tree_Test(object):
 		self.game = game
 		self.children = {}
 		self.child_moves = {}
-		self.best_child = [["",-1,-1]]
+		self.best_child = []
 		self.alpha = A
 		self.beta = B
 		self.depth_limit = depth_lim
@@ -56,6 +56,7 @@ class ABPruning_Tree_Test(object):
 	def set_children(self):
 		# self.child_moves = {}
 		# need to get the actual move so that we can return that, not the state.
+		self.child_moves = self.game.get_child_state2move_dict()
 		self.children = {x:None for x in self.game.get_child_states()}
 		
 	def get_child_tree_by_state(self, child_state):
@@ -67,13 +68,12 @@ class ABPruning_Tree_Test(object):
 	def is_terminal_node(self):
 		return self.game.is_game_over()
 		
-	def get_best_child(self):
+	def get_best_child_pair(self):
 		value = []
 		if len(self.best_child)==1:
 			value = self.best_child[0]
 		else:
-			size = len(self.best_child)-1
-			value = self.best_child[random.randint(0,size)]
+			value = random.choice(self.best_child)
 		return value
 		
 	def search(self):
@@ -96,9 +96,9 @@ class ABPruning_Tree_Test(object):
 					self.children[child_state].re_init(self.depth_limit-1, self.alpha, self.beta)
 				child_value = self.children[child_state].search()
 				if (self.is_max and child_value > self.value) or (not self.is_max and child_value < self.value):
-					self.best_child = [child_state]
+					self.best_child = [(child_state,self.child_moves[child_state])]
 				elif child_value == self.value:
-					self.best_child += [child_state]
+					self.best_child += [(child_state,self.child_moves[child_state])]
 				if self.is_max:
 					self.value = max(self.value, child_value)
 					self.alpha = max(self.alpha, self.value)
@@ -115,7 +115,7 @@ class ABPruning_Tree(object):
 	def __init__(self, game, depth_lim = DEFAULT_DEPTH, A = LOWER_BOUND, B = UPPER_BOUND, heuristic = None, i_am_max = True, p_depth = 0):
 		self.game = game
 		self.children = []
-		self.best_child = [["",-1,-1]]
+		self.best_child = []
 		self.alpha = A
 		self.beta = B
 		self.depth_limit = depth_lim
@@ -140,7 +140,7 @@ class ABPruning_Tree(object):
 	def is_terminal_node(self):
 		return self.game.is_game_over()
 		
-	def get_best_child(self):
+	def get_best_child_pair(self):
 		value = []
 		if len(self.best_child)==1:
 			value = self.best_child[0]

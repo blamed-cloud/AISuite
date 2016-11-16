@@ -87,6 +87,17 @@ class Game(object):
 				print "IT WAS A DRAW!"
 		return self.winner
 	
+	#method to get a dictionary of (Game_State, Move) pairs.
+	#this assumes 2 things:
+	#	1) len(self.get_child_states()) == len(self.get_child_moves())
+	#	2) self.get_child_states[x] is the state created by doing move self.get_child_moves[x]
+	#get_child_state2move_dict : Game -> {Game_State: Move}
+	def get_child_state2move_dict(self):
+	### required by alphabeta.py ###
+		keys = self.get_child_states()
+		values = self.get_child_moves()
+		return {keys[x] : values[x] for x in range(len(keys))}
+	
 	#the remainder of the functions are specific to your implementation.
 	#along with these, you should also write a more specific __init__
 	#or some other way to create a default game state.
@@ -102,6 +113,7 @@ class Game(object):
 	#should return a list containing the possible game_states
 	#that could result from the current player doing their turn.
 	#NOTE: you should use __str__ to create the game_states.
+	### Keep in mind the requirements noted in get_child_state2move_dict above. ###
 	#get_child_states : Game -> [Game_State]
 	def get_child_states(self):
 	### required by alphabeta.py ###
@@ -110,6 +122,7 @@ class Game(object):
 	#similar to the previous method, except returns a valid move for your game.
 	#its up to you to decide the format for a move that should be used here,
 	#and is returned from Player.choose_move
+	### Keep in mind the requirements noted in get_child_state2move_dict above. ###
 	#get_child_moves : Game -> [Move]
 	def get_child_moves(self):
 	### required by player.py ###
