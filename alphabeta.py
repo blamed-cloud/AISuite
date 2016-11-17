@@ -90,7 +90,7 @@ class ABPruning_Tree_Test(object):
 				if self.children[child_state] == None:
 					baby = self.game.make_new_instance()
 					baby.load_state_from_string(child_state)
-					child = ABPruning_Tree(baby, self.depth_limit-1, self.alpha, self.beta, self.evaluate, not self.is_max)
+					child = ABPruning_Tree_Test(baby, self.depth_limit-1, self.alpha, self.beta, self.evaluate, not self.is_max)
 					child.set_volatility_measure(self.is_volatile)
 					self.children[child_state] = child
 				else:
