@@ -96,7 +96,6 @@ class Game(object):
 	### required by alphabeta.py ###
 		keys = self.get_child_states()
 		values = self.get_child_moves()
-		print keys, values
 		d = {keys[x] : values[x] for x in range(len(keys))}
 		return d
 	
