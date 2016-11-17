@@ -26,6 +26,7 @@ def default_volatility_measure(game):
 class ABPruning_Tree_Test(object):
 	def __init__(self, game, depth_lim = DEFAULT_DEPTH, A = LOWER_BOUND, B = UPPER_BOUND, heuristic = None, i_am_max = True):
 		self.game = game
+		self.state = str(self.game)
 		self.children = {}
 		self.child_moves = {}
 		self.best_child = []
@@ -114,6 +115,7 @@ class ABPruning_Tree_Test(object):
 class ABPruning_Tree(object):
 	def __init__(self, game, depth_lim = DEFAULT_DEPTH, A = LOWER_BOUND, B = UPPER_BOUND, heuristic = None, i_am_max = True, p_depth = 0):
 		self.game = game
+		self.state = str(self.game)
 		self.children = []
 		self.best_child = []
 		self.alpha = A
