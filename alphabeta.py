@@ -5,12 +5,6 @@ import sys
 import random
 import player
 
-#from heuristics import is_volatile
-#from heuristics import is_board_won
-
-#from fractoe_board import DEFAULT_GAME_FILE
-#from fractoe_board import TEMP_GAME_FILE
-
 UPPER_BOUND = 100
 LOWER_BOUND = -100
 
@@ -20,17 +14,19 @@ VOLATILE_DEPTH = -3
 ORDER_NORMAL = 1
 ORDER_FREE = 2
 
-
+#function for returning randomly from the shallowest best children
 def shallowest_first(best_child_list):
 	min_depth = max([tup[2] for tup in best_child_list])	# max because depths start high and go to zero (or negative)
 	choices = [tup for tup in best_child_list if tup[2] == min_depth]
 	return random.choice(choices)
-	
+
+#function for returning randomly from the deepest best children	
 def deepest_first(best_child_list):
 	min_depth = min([tup[2] for tup in best_child_list])	# min because depths start high and go to zero (or negative)
 	choices = [tup for tup in best_child_list if tup[2] == min_depth]
 	return random.choice(choices)
-	
+
+#function to simply return randomly from any of the best children, ignoring depth	
 def ignore_depth(best_child_list):
 	return random.choice(best_child_list)
 
@@ -113,6 +109,7 @@ class ABPruning_Tree_Test(object):
 					baby.load_state_from_string(child_state)
 					child = ABPruning_Tree_Test(baby, self.depth_limit-1, self.alpha, self.beta, self.evaluate, not self.is_max)
 					child.set_volatility_measure(self.is_volatile)
+					child.set_child_selector(self.choose_best_child)
 					self.children[child_state] = child
 				else:
 					self.children[child_state].re_init(self.depth_limit-1, self.alpha, self.beta)
