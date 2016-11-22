@@ -20,6 +20,20 @@ VOLATILE_DEPTH = -3
 ORDER_NORMAL = 1
 ORDER_FREE = 2
 
+
+def shallowest_first(best_child_list):
+	min_depth = max([tup[2] for tup in best_child_list])	# max because depths start high and go to zero (or negative)
+	choices = [tup for tup in best_child_list if tup[2] == min_depth]
+	return random.choice(choices)
+	
+def deepest_first(best_child_list):
+	min_depth = min([tup[2] for tup in best_child_list])	# min because depths start high and go to zero (or negative)
+	choices = [tup for tup in best_child_list if tup[2] == min_depth]
+	return random.choice(choices)
+	
+def ignore_depth(best_child_list):
+	return random.choice(best_child_list)
+
 def default_volatility_measure(game):
 	return False
 
@@ -38,6 +52,7 @@ class ABPruning_Tree_Test(object):
 		self.value = 0
 		self.is_max = i_am_max
 		self.have_children = False
+		self.choose_best_child = ignore_depth
 		
 	def re_init(self, depth, A, B):
 		self.depth_limit = depth
@@ -48,8 +63,14 @@ class ABPruning_Tree_Test(object):
 	def set_heuristic(self, heuristic):
 		self.evaluate = heuristic
 		
+	def set_child_selector(self, selector):
+		self.choose_best_child = selector
+		
 	def set_volatility_measure(self, vol):
 		self.is_volatile = vol
+		
+	def get_depth(self):
+		return self.depth_limit
 		
 	def set_game(self, game):
 		self.game = game
@@ -69,12 +90,12 @@ class ABPruning_Tree_Test(object):
 	def is_terminal_node(self):
 		return self.game.is_game_over()
 		
-	def get_best_child_pair(self):
+	def get_best_child_tuple(self):
 		value = []
 		if len(self.best_child)==1:
 			value = self.best_child[0]
 		else:
-			value = random.choice(self.best_child)
+			value = self.choose_best_child(self.best_child)
 		return value
 		
 	def search(self):
@@ -96,10 +117,11 @@ class ABPruning_Tree_Test(object):
 				else:
 					self.children[child_state].re_init(self.depth_limit-1, self.alpha, self.beta)
 				child_value = self.children[child_state].search()
+				child_depth = self.children[child_state].get_depth()
 				if (self.is_max and child_value > self.value) or (not self.is_max and child_value < self.value):
-					self.best_child = [(child_state,self.child_moves[child_state])]
+					self.best_child = [(child_state,self.child_moves[child_state],child_depth)]
 				elif child_value == self.value:
-					self.best_child += [(child_state,self.child_moves[child_state])]
+					self.best_child += [(child_state,self.child_moves[child_state],child_depth)]
 				if self.is_max:
 					self.value = max(self.value, child_value)
 					self.alpha = max(self.alpha, self.value)
@@ -142,7 +164,7 @@ class ABPruning_Tree(object):
 	def is_terminal_node(self):
 		return self.game.is_game_over()
 		
-	def get_best_child_pair(self):
+	def get_best_child_tuple(self):
 		value = []
 		if len(self.best_child)==1:
 			value = self.best_child[0]

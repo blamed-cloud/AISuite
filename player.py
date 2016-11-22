@@ -60,18 +60,24 @@ class AI_ABPruning(Player):
 		
 	def set_volatility_func(self, vol):
 		self.set_vol = True
-		self.vol_func = vol		
+		self.vol_func = vol
+		
+	def set_child_selector(self, selector):
+		self.set_sel = True
+		self.sel_func = selector	
 	
 	def choose_move(self, game):
 		if self.tree == None:
 			self.tree = alphabeta.ABPruning_Tree_Test(game, self.depth, self.low, self.up, self.heuristic, game.get_player_num() == 1)
 			if self.set_vol:
 				self.tree.set_volatility_measure(self.vol_func)
+			if self.set_sel:
+				self.tree.set_child_selector(self.sel_func)
 		else:
 			self.tree = self.tree.get_child_tree_by_state(str(game))
 			self.tree.re_init(self.depth, self.low, self.up)
 		self.tree.search()
-		child_pair = self.tree.get_best_child_pair()
+		child_pair = self.tree.get_best_child_tuple()
 		self.tree = self.tree.get_child_tree_by_state(child_pair[0])
 		return child_pair[1]
 
