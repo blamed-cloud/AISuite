@@ -103,7 +103,8 @@ class ABPruning_Tree_Test(object):
 			self.value = self.evaluate(self.state)
 			best_child_depth = self.depth_limit
 		else:
-			self.set_children()
+			if self.children == {}:
+				self.set_children()
 			if self.is_max:
 				self.value = LOWER_BOUND
 			else:
