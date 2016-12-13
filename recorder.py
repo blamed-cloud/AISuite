@@ -93,10 +93,7 @@ class Recorder(object):
 			prob_o /= 10
 			prob_d /= 10
 				
-		if prob_d > prob_x and prob_d > prob_o:
-			value = 0
-		else:
-			value = int(prob_x - prob_o)
+		value = int(prob_x - prob_o)
 				
 		#respect the bounds
 		if value >= UPPER_BOUND:
