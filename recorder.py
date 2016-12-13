@@ -49,8 +49,9 @@ class Recorder(object):
 		f.close()
 		
 	def parse_game(self, game_state):
-		grid1 = game_state.split(';')
-		winner = int(grid1[-1])
+		temp = game_state.split('~')
+		grid1 = temp[0].split(';')
+		winner = int(temp[1])
 		grid2 = grid1[:self.rows]
 		for y in range(self.rows):
 			for x in range(self.cols):

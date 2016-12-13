@@ -28,6 +28,9 @@ class Game(object):
 		#is at the index of their turn.
 		self.players = [None, player1, player2]
 		
+		#history of all game_state strings of the game.
+		self.history = []
+		
 	#gets the current turn number
 	#get_turn : Game -> Int
 	def get_turn(self):
@@ -77,8 +80,10 @@ class Game(object):
 	#the do_turn method actually does all the work, have fun.
 	#play : Game -> Int
 	def play(self):
+		self.history += [str(self)]
 		while self.winner == -1:
 			self.do_turn()
+			self.history += [str(self)]
 		if not self.quiet:
 			self.opg()
 			if self.winner != 0:
@@ -86,6 +91,13 @@ class Game(object):
 			else:
 				print "IT WAS A DRAW!"
 		return self.winner
+	
+	#method to add history of the game to a file
+	#requires that the  FILE be open and have a write() method
+	#record_history_to_file : Game x FILE -> _
+	def record_history_to_file(self, FILE):
+		for state in self.history:
+			FILE.write(state + '~' + self.winner + '\n')
 	
 	#method to get a dictionary of (Game_State, Move) pairs.
 	#this assumes 2 things:
