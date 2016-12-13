@@ -11,7 +11,10 @@ class data_square(object):
 			self.data[t] = d
 		
 	def get_prob(self, token, winner):
-		return self.data[token][winner] / self.total
+		num = 1
+		if self.data[token][winner] != 0:
+			num = self.data[token][winner]
+		return num / float(self.total)
 		
 	def get_total(self):
 		return self.total
