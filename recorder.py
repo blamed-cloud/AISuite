@@ -56,7 +56,7 @@ class Recorder(object):
 		
 	def recorder_heuristic(self, game_state):
 		value = 0
-		grid1 = re.split(';', game_state)
+		grid1 = game_state.split(';')
 		winner = int(grid1[-1])
 		grid2 = grid1[:self.rows]
 		prob_x = 100.0
