@@ -44,7 +44,7 @@ class Recorder(object):
 		f.close()
 		
 	def parse_game(self, game_state):
-		grid1 = re.split(';', game_state)
+		grid1 = game_state.split(';')
 		winner = int(grid1[-1])
 		grid2 = grid1[:self.rows]
 		for y in range(self.rows):
