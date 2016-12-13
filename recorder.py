@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 #game.py
 import PythonLibraries.matrix_lib as matrix_lib
+from alphabeta import UPPER_BOUND
+from alphabeta import LOWER_BOUND
 
 class data_square(object):
 	def __init__(self, tokens):
