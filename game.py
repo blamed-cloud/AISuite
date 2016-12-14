@@ -97,7 +97,7 @@ class Game(object):
 	#record_history_to_file : Game x FILE -> _
 	def record_history_to_file(self, FILE):
 		for state in self.history:
-			FILE.write(state + '~' + self.winner + '\n')
+			FILE.write(state + '~' + str(self.winner) + '\n')
 	
 	#method to get a dictionary of (Game_State, Move) pairs.
 	#this assumes 2 things:
