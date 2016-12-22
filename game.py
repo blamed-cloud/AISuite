@@ -4,7 +4,7 @@
 #base class for your game_class that you make
 class Game(object):
 	#class-specific escape codes for user-input
-	escapes = [":w", ":q", ":wq", ":r"]
+	escapes = [":w", ":q", ":wq", ":r", ":m"]
 	
 	#defualt constructor, sets up some general variables you might want
 	#you can call this with:
@@ -58,6 +58,8 @@ class Game(object):
 			raise SystemExit
 		elif code == ":r":
 			pass
+		elif code == ":m":
+			print self.get_child_moves()
 	
 	#returns the number of the current player (1 or 2 by default)
 	#get_player_num : Game -> Int
