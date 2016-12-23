@@ -83,6 +83,13 @@ class ABPruning_Tree_Test(object):
 	def get_child_tree_by_state(self, child_state):
 		t = self
 		if child_state in self.children:
+			if self.children[child_state] == None:
+				baby = self.game.make_new_instance()
+				baby.load_state_from_string(child_state)
+				child = ABPruning_Tree_Test(baby, self.depth_limit-1, self.alpha, self.beta, self.evaluate, not self.is_max)
+				child.set_volatility_measure(self.is_volatile)
+				child.set_child_selector(self.choose_best_child)
+				self.children[child_state] = child
 			t = self.children[child_state]
 		return t
 		
