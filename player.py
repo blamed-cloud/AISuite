@@ -18,8 +18,14 @@ class Player(object):
 		return self.human
 		
 	#method to choose a move for the game.
-	#choose_move : Game -> Move
+	#choose_move : Player x Game -> Move
 	def choose_move(self, game):
+		pass
+		
+	#method to reset the inner data of the player
+	#to be used if you want to play a new game for example
+	#reset : Player -> _
+	def reset(self):
 		pass
 
 		
@@ -43,6 +49,9 @@ class RandomAI(Player):
 	def choose_move(self, game):
 		moves = game.get_child_moves()
 		return random.choice(moves)
+		
+	def reset(self):
+		random.seed()
 
 
 #class for doing alpha-beta pruning
@@ -80,5 +89,8 @@ class AI_ABPruning(Player):
 		child_pair = self.tree.get_best_child_tuple()
 		self.tree = self.tree.get_child_tree_by_state(child_pair[0])
 		return child_pair[1]
+		
+	def reset(self):
+		self.tree = None
 
 
