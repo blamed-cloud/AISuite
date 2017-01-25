@@ -87,7 +87,7 @@ class ABPruning_Tree(object):
 				child = self.make_child_by_state(child_state)
 				self.children[child_state] = child
 			t = self.children[child_state]
-		else
+		else:
 			t = self.make_child_by_state(child_state)
 		return t
 		
