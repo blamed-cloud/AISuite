@@ -105,7 +105,7 @@ class ABPruning_Tree(object):
 	def make_child_by_state(self, child_state):	
 		baby = self.game.make_new_instance()
 		baby.load_state_from_string(child_state)
-		child = ABPruning_Tree(baby, self.depth_limit-1, self.alpha, self.beta, self.evaluate, self.baby.get_player_num() == 1)
+		child = ABPruning_Tree(baby, self.depth_limit-1, self.alpha, self.beta, self.evaluate, baby.get_player_num() == 1)
 		child.set_volatility_measure(self.is_volatile)
 		child.set_child_selector(self.choose_best_child)
 		return child
