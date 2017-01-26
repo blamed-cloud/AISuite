@@ -53,9 +53,9 @@ class ABPruning_Tree(object):
 		self.have_children = False
 		
 		if self.is_max:
-			best_chance_selector.sel = max
+			self.best_chance_selector.sel = max
 		else:
-			best_chance_selector.sel = min
+			self.best_chance_selector.sel = min
 		
 		self.choose_best_child = self.best_chance_selector
 
