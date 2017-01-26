@@ -52,11 +52,13 @@ class ABPruning_Tree(object):
 		self.is_max = i_am_max
 		self.have_children = False
 		
-		self.choose_best_child = self.best_chance_selector
 		if self.is_max:
-			self.choose_best_child.sel = max
+			best_chance_selector.sel = max
 		else:
-			self.choose_best_child.sel = min
+			best_chance_selector.sel = min
+		
+		self.choose_best_child = self.best_chance_selector
+
 		
 	def re_init(self, depth, A, B):
 		self.depth_limit = depth
