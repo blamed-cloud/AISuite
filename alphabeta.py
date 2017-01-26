@@ -51,13 +51,33 @@ class ABPruning_Tree(object):
 		self.value = 0
 		self.is_max = i_am_max
 		self.have_children = False
-		self.choose_best_child = ignore_depth
+		
+		self.choose_best_child = self.best_chance_selector
+		if self.is_max:
+			self.choose_best_child.sel = max
+		else:
+			self.choose_best_child.sel = min
 		
 	def re_init(self, depth, A, B):
 		self.depth_limit = depth
 		self.alpha = A
 		self.beta = B
 		self.value = 0
+		
+	def best_chance_selector(self, best_child_list):
+		value = None
+		if self.is_max:
+			if self.value > 0:
+				value = shallowest_first(best_child_list)
+			if self.value <= 0:
+				value = deepest_first(best_child_list)
+		else:
+			if self.value < 0:
+				value = shallowest_first(best_child_list)
+			if self.value >= 0:
+				value = deepest_first(best_child_list)
+		return value
+			
 		
 	def set_heuristic(self, heuristic):
 		self.evaluate = heuristic
