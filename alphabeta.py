@@ -138,7 +138,7 @@ class ABPruning_Tree(object):
 		baby.load_state_from_string(child_state)
 		child = ABPruning_Tree(baby, self.depth_limit-1, self.alpha, self.beta, self.evaluate, baby.get_player_num() == 1)
 		child.set_volatility_measure(self.is_volatile)
-		child.set_child_selector(self.choose_best_child)
+		child.set_child_selector(self.choose_best_child, self.depth_sel)
 		return child
 
 	def search(self):
