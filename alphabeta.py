@@ -52,13 +52,8 @@ class ABPruning_Tree(object):
 		self.is_max = i_am_max
 		self.have_children = False
 		
-		if self.is_max:
-			self.best_chance_selector.sel = max
-		else:
-			self.best_chance_selector.sel = min
-		
 		self.choose_best_child = self.best_chance_selector
-
+		self.depth_sel = self.best_chance_sel
 		
 	def re_init(self, depth, A, B):
 		self.depth_limit = depth
@@ -79,13 +74,27 @@ class ABPruning_Tree(object):
 			if self.value >= 0:
 				value = deepest_first(best_child_list)
 		return value
-			
+		
+	def best_chance_sel(self, depth_list):
+		value = None
+		if self.is_max:
+			if self.value > 0:
+				value = max(depth_list)
+			if self.value <= 0:
+				value = min(depth_list)
+		else:
+			if self.value < 0:
+				value = max(best_child_list)
+			if self.value >= 0:
+				value = min(best_child_list)
+		return value	
 		
 	def set_heuristic(self, heuristic):
 		self.evaluate = heuristic
 		
-	def set_child_selector(self, selector):
+	def set_child_selector(self, selector, depth_selector):
 		self.choose_best_child = selector
+		self.depth_sel = depth_selector
 		
 	def set_volatility_measure(self, vol):
 		self.is_volatile = vol
@@ -158,7 +167,7 @@ class ABPruning_Tree(object):
 					best_child_depth = child_depth
 				elif child_value == self.value:
 					self.best_child += [(child_state,self.child_moves[child_state],child_depth)]
-					best_child_depth = self.choose_best_child.sel([best_child_depth, child_depth])
+					best_child_depth = self.depth_sel([best_child_depth, child_depth])
 				if self.is_max:
 					self.value = max(self.value, child_value)
 					self.alpha = max(self.alpha, self.value)
