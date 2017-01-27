@@ -65,15 +65,19 @@ class AI_ABPruning(Player):
 		self.low = lower_bound
 		self.set_vol = False
 		self.vol_func = None
+		self.set_sel = False
+		self.sel_func = None
+		self.depth_sel = None
 		self.tree = None
 		
 	def set_volatility_func(self, vol):
 		self.set_vol = True
 		self.vol_func = vol
 		
-	def set_child_selector(self, selector):
+	def set_child_selector(self, selector, depth_selector):
 		self.set_sel = True
-		self.sel_func = selector	
+		self.sel_func = selector
+		self.depth_sel = depth_selector
 	
 	def choose_move(self, game):
 		if self.tree == None:
@@ -81,7 +85,7 @@ class AI_ABPruning(Player):
 			if self.set_vol:
 				self.tree.set_volatility_measure(self.vol_func)
 			if self.set_sel:
-				self.tree.set_child_selector(self.sel_func)
+				self.tree.set_child_selector(self.sel_func, self.depth_sel)
 		else:
 			self.tree = self.tree.get_child_tree_by_state(str(game))
 			self.tree.re_init(self.depth, self.low, self.up)
