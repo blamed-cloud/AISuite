@@ -84,9 +84,9 @@ class ABPruning_Tree(object):
 				value = min(depth_list)
 		else:
 			if self.value < 0:
-				value = max(best_child_list)
+				value = max(depth_list)
 			if self.value >= 0:
-				value = min(best_child_list)
+				value = min(depth_list)
 		return value	
 		
 	def set_heuristic(self, heuristic):
