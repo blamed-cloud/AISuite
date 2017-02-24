@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#game.py
+#recorder.py
 import PythonLibraries.matrix_lib as matrix_lib
 from alphabeta import UPPER_BOUND
 from alphabeta import LOWER_BOUND
