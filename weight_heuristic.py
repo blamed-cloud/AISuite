@@ -1,11 +1,14 @@
 #!/usr/bin/env python
 #weight_heuristic.py
+import random
 from alphabeta import UPPER_BOUND
 from alphabeta import LOWER_BOUND
 
 class WeightHeuristic(object):
 	def __init__(self, weight_m):
 		self.weights = weight_m
+		self.wins = 0
+		self.losses = 0
 		
 	def __call__(self, game_state):
 		value = 0
@@ -36,9 +39,48 @@ class WeightHeuristic(object):
 	
 		return value
 		
+	def get_weights(self):
+		return self.weights	
+	
 	def parse(self, game_state):
 		pass
 		
-	def reproduce(self, other_weights, mutation_rate = .001):
-		pass
+	def record_game(self, win = False):
+		if win:
+			self.wins += 1
+		else:
+			self.losses += 1
+			
+	def get_fitness(self):
+		return float(self.wins)/float(self.wins + self.losses)
+		
+	def reproduce(self, other, mutation_rate = .001):
+		child_w = {}
+		ow = other.get_weights()
+		for token in self.weights:
+			matrix = []
+			for y in range(len(self.weights[token])):
+				row = []
+				for x in range(len(self.weights[token])):
+					my_w = self.weights[token][y][x]
+					other_w = ow[token][y][x]
+					new_value = 0
+					if my_w*other_w < 0:		# they have opposite signs.
+						new_value = random.choice([my_w,other_w])
+					elif my_w*other_w > 0:		# they have the same sign.
+						new_value = (my_w + other_w)/2
+					else:				# at least one is zero.
+						if my_w != 0:
+							new_value = my_w
+						else:
+							new_value = other_w
+					if random.random() < mutation_rate:	# mutation occured
+						new_value = random.randint(LOWER_BOUND,UPPER_BOUND)
+					row += [new_value]
+				matrix += [row]
+			child_w[token] = matrix
+		return self.__class__(child_w)
+					
+					
+					
 	
