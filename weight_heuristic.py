@@ -45,7 +45,7 @@ class WeightHeuristic(object):
 	def parse(self, game_state):
 		pass
 		
-	def record_game(self, win = False):
+	def record_game(self, win = False):	# this counts draws as losses, which should be fine since it is across the board.
 		if win:
 			self.wins += 1
 		else:
