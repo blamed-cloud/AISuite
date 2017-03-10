@@ -37,4 +37,24 @@ class Generation(object):
 		self.fit_sort()
 		return self.generation[:n]
 		
+
+class Population(object):
 	
+	def __init__(self, generation_file = None):
+		if generation_file == None:
+			self.gen = self.create_random_gen()
+		else:
+			self.gen = self.load_gen_from_file(generation_file)
+			
+		
+	def load_gen_from_file(self, gen_file):
+		pass
+		
+	def create_random_gen(self):
+		pass
+		
+	def evovle(self, iterations = 10):
+		pass
+		
+	def export_gen_to_file(self, gen_file):
+		pass
