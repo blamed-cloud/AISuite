@@ -61,21 +61,22 @@ class WeightHeuristic(object):
 			matrix = []
 			for y in range(len(self.weights[token])):
 				row = []
-				for x in range(len(self.weights[token])):
-					my_w = self.weights[token][y][x]
-					other_w = ow[token][y][x]
+				for x in range(len(self.weights[token][y])):
 					new_value = 0
-					if my_w*other_w < 0:		# they have opposite signs.
-						new_value = random.choice([my_w,other_w])
-					elif my_w*other_w > 0:		# they have the same sign.
-						new_value = (my_w + other_w)/2
-					else:				# at least one is zero.
-						if my_w != 0:
-							new_value = my_w
-						else:
-							new_value = other_w
 					if random.random() < mutation_rate:	# mutation occured
 						new_value = random.randint(LOWER_BOUND,UPPER_BOUND)
+					else:
+						my_w = self.weights[token][y][x]
+						other_w = ow[token][y][x]
+						if my_w*other_w < 0:		# they have opposite signs.
+							new_value = random.choice([my_w,other_w])
+						elif my_w*other_w > 0:		# they have the same sign.
+							new_value = (my_w + other_w)/2
+						else:				# at least one is zero.
+							if my_w != 0:
+								new_value = my_w
+							else:
+								new_value = other_w
 					row += [new_value]
 				matrix += [row]
 			child_w[token] = matrix

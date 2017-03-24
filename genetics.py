@@ -2,6 +2,8 @@
 #genetics.py
 
 import player
+import pickle
+import random
 
 class Generation(object):
 	
@@ -40,21 +42,49 @@ class Generation(object):
 
 class Population(object):
 	
-	def __init__(self, generation_file = None):
+	def __init__(self, game_class, generation_file = None):
+		self.game_class = game_class
 		if generation_file == None:
 			self.gen = self.create_random_gen()
 		else:
 			self.gen = self.load_gen_from_file(generation_file)
+		self.ancestry = [self.gen]
 			
 		
 	def load_gen_from_file(self, gen_file):
-		pass
+		FILE = open(gen_file,'r')
+		self.gen = pickle.load(FILE)
+		FILE.close()
 		
-	def create_random_gen(self):
-		pass
+	def create_random_gen(self, example_org, gen_size = 100):
+		gen = Generation()
+		for i in range(gen_size):
+			gen.add_member(example_org.reproduce(example_org,1))	#mutation rate of 1 always mutates; creates random weights.
+		return gen
 		
-	def evovle(self, iterations = 10):
-		pass
+	def get_ancestry(self):
+		return self.ancestry
+		
+	def evolve(self, iterations = 10, best_percent = 10):
+		for i in range(iterations):
+			self.gen.calc_fitness(self.game_class)
+			n = int(len(self.gen)/best_percent)
+			pairs = []
+			while len(pairs) < len(self.gen):
+				x = random.randint(0,n-1)
+				y = x
+				while y == x:
+					y = random.randint(0,n-1)
+				pairs.append((x,y))
+			best_n = self.gen.get_best_n(n)
+			new_gen = Generation()
+			for p in pairs:
+				new_gen.add_member(best_n[p[0]].reproduce(best_n[p[1]]))
+			self.ancestry += [new_gen]
+			self.gen = new_gen
 		
 	def export_gen_to_file(self, gen_file):
-		pass
+		FILE = open(gen_file, 'w')
+		pickle.dump(self.gen, FILE)
+		FILE.close()
+		
