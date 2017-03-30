@@ -42,12 +42,11 @@ class Generation(object):
 
 class Population(object):
 	
-	def __init__(self, game_class, generation_file = None):
+	def __init__(self, game_class, generation_file = None, load = False):
 		self.game_class = game_class
-		if generation_file == None:
-			self.gen = self.create_random_gen()
-		else:
-			self.gen = self.load_gen_from_file(generation_file)
+		self.gen_file = generation_file
+		if load:
+			self.load_gen_from_file(self.gen_file)
 		self.ancestry = [self.gen]
 			
 		

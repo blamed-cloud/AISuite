@@ -42,6 +42,9 @@ class WeightHeuristic(object):
 	def get_weights(self):
 		return self.weights	
 	
+	#method to  parse the game_state into a tuple
+	#containing (winner, turn, matrix)
+	#parse : Game_State -> (Int, Int, List)
 	def parse(self, game_state):
 		pass
 		
