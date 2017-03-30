@@ -63,6 +63,9 @@ class Population(object):
 			gen.add_member(example_org.reproduce(example_org,1))	#mutation rate of 1 always mutates; creates random weights.
 		return gen
 		
+	def set_gen(self, gen):
+		self.gen = gen
+		
 	def get_ancestry(self):
 		return self.ancestry
 		
