@@ -45,9 +45,11 @@ class Population(object):
 	def __init__(self, game_class, generation_file = None, load = False):
 		self.game_class = game_class
 		self.gen_file = generation_file
+		self.gen = None
+		self.ancestry = []
 		if load:
 			self.load_gen_from_file(self.gen_file)
-		self.ancestry = [self.gen]
+			self.ancestry = [self.gen]
 			
 		
 	def load_gen_from_file(self, gen_file):
