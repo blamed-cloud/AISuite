@@ -55,7 +55,10 @@ class WeightHeuristic(object):
 			self.losses += 1
 			
 	def get_fitness(self):
-		return float(self.wins)/float(self.wins + self.losses)
+		if self.wins + self.losses == 0:
+			return 0
+		else:
+			return float(self.wins)/float(self.wins + self.losses)
 		
 	def reproduce(self, other, mutation_rate = .001):
 		child_w = {}
