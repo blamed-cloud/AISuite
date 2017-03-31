@@ -16,11 +16,17 @@ class Generation(object):
 	def __len__(self):
 		return len(self.generation)
 		
-	def calc_fitness(self, game_class, num_games_first = 5, depth = 3):
+	def calc_fitness(self, game_class, num_games_first = 5, depth = 3, quiet = False):
+		org_num = 0
 		for org in self.generation:
+			org_num += 1
+			if not quiet:
+				print "organism number: " + org_num
 			org_player = player.AI_ABPruning(org, depth_lim = depth)
 			r_player = player.RandomAI()
 			for x in range(num_games_first):
+				if not quiet:
+					print "    Game num: " + x
 				g_first = game_class(org_player, r_player, True)
 				g_second = game_class(r_player, org_player, True)
 				w_f = g_first.play() == 1
@@ -69,9 +75,11 @@ class Population(object):
 	def get_ancestry(self):
 		return self.ancestry
 		
-	def evolve(self, iterations = 10, best_percent = 10):
+	def evolve(self, iterations = 10, best_percent = 10, num_games_first = 5, depth = 3, quiet = False):
 		for i in range(iterations):
-			self.gen.calc_fitness(self.game_class)
+			if not quiet:
+				print "Iteration " + i
+			self.gen.calc_fitness(self.game_class, num_games_first, depth, quiet)
 			n = int(len(self.gen)/best_percent)
 			pairs = []
 			while len(pairs) < len(self.gen):
