@@ -23,7 +23,7 @@ class Generation(object):
 			if not quiet:
 				print "organism number: " + str(org_num)
 			org_player = player.AI_ABPruning(org, depth_lim = depth)
-			r_player = player.RandomAI()
+			r_player = player.Random_TreeAI(depth)
 			for x in range(num_games_first):
 				if not quiet:
 					print "    Game num: " + str(x)

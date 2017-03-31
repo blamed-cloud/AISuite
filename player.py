@@ -52,7 +52,34 @@ class RandomAI(Player):
 		
 	def reset(self):
 		random.seed()
+		
+		
+#random opponent with a tree. (hopefully won't lose to depth-move traps)
+class Random_TreeAI(player):
+	def __init__(self, depth_lim = DEFAULT_DEPTH, upper_bound = UPPER_BOUND, lower_bound = LOWER_BOUND):
+		self.human = False
+		self.depth = depth_lim
+		self.up = upper_bound
+		self.low = lower_bound
+		self.tree = None
+		
+	def heuristic(self, game_state):
+		return random.randint(self.low + 1, self.up - 1)
+		
+	def choose_move(self, game):
+		if self.tree == None:
+			self.tree = alphabeta.ABPruning_Tree(game, self.depth, self.low, self.up, self.heuristic, game.get_player_num() == 1)
+		else:
+			self.tree = self.tree.get_child_by_state(str(game))
+			self.tree.re_init(self.depth, self.low, self.up)
+		self.tree.search()
+		child_pair = self.tree.get_best_child_tuple()
+		self.tree = self.tree.get_child_tree_by_state(child_pair[0])
+		return child_pair[1]
 
+	def reset(self):
+		random.seed()
+		self.tree = None
 
 #class for doing alpha-beta pruning
 class AI_ABPruning(Player):
