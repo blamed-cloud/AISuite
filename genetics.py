@@ -50,7 +50,7 @@ class Generation(object):
 		org_num = 0
 		for org in self.generation:
 			org_num += 1
-			print "organism" + str(org_num() + ": " + str(org.get_fitness())			
+			print "organism" + str(org_num() + ": " + str(org.get_fitness())
 	
 	def fit_sort(self):
 		if not self.fit_calced:
