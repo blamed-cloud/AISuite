@@ -7,16 +7,19 @@ import random
 
 class Generation(object):
 	
-	def __init__(self):
+	def __init__(self, game_class):
 		self.generation = []
+		self.fit_calced = False
+		self.game_class = game_class
 		
 	def add_member(self, organism):
 		self.generation.append(organism)
+		self.fit_calced = False
 		
 	def __len__(self):
 		return len(self.generation)
 		
-	def calc_fitness(self, game_class, num_games_first = 5, depth = 3, quiet = False):
+	def calc_fitness(self, num_games_first = 5, depth = 3, quiet = False):
 		org_num = 0
 		for org in self.generation:
 			org_num += 1
@@ -27,8 +30,8 @@ class Generation(object):
 			for x in range(num_games_first):
 				if not quiet:
 					print "    Game num: " + str(x)
-				g_first = game_class(org_player, r_player, True)
-				g_second = game_class(r_player, org_player, True)
+				g_first = self.game_class(org_player, r_player, be_quiet = True)
+				g_second = self.game_class(r_player, org_player, be_quiet = True)
 				w_f = g_first.play() == 1
 				org_player.reset()
 				r_player.reset()
@@ -37,8 +40,21 @@ class Generation(object):
 				r_player.reset()
 				org.record_game(w_f)
 				org.record_game(w_s)
+			if not quiet:
+				print "    Fitness: " + str(org.get_fitness())
+		self.fit_calced = True
 				
+	def report_fitness(self):
+		if not self.fit_calced:
+			self.calc_fitness()
+		org_num = 0
+		for org in self.generation:
+			org_num += 1
+			print "organism" + str(org_num() + ": " + str(org.get_fitness())			
+	
 	def fit_sort(self):
+		if not self.fit_calced:
+			self.calc_fitness()
 		self.generation = sorted(self.generation, key = lambda x: x.get_fitness())
 
 	def get_best_n(self, n):
@@ -64,10 +80,13 @@ class Population(object):
 		FILE.close()
 		
 	def create_random_gen(self, example_org, gen_size = 100):
-		gen = Generation()
+		gen = Generation(self.game_class)
 		for i in range(gen_size):
 			gen.add_member(example_org.reproduce(example_org,1))	#mutation rate of 1 always mutates; creates random weights.
 		return gen
+		
+	def load_random_gen(self, example_org, gen_size = 100):
+		self.set_gen(self.create_random_gen(example_org, gen_size))
 		
 	def set_gen(self, gen):
 		self.gen = gen
