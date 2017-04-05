@@ -109,7 +109,7 @@ class Population(object):
 					y = random.randint(0,n-1)
 				pairs.append((x,y))
 			best_n = self.gen.get_best_n(n)
-			new_gen = Generation()
+			new_gen = Generation(self.game_class)
 			for p in pairs:
 				new_gen.add_member(best_n[p[0]].reproduce(best_n[p[1]]))
 			self.ancestry += [new_gen]
