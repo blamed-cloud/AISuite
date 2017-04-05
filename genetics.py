@@ -100,7 +100,7 @@ class Population(object):
 			if not quiet:
 				print "Iteration " + str(i)
 			self.gen.calc_fitness(num_games_first, depth, quiet)
-			n = int(len(self.gen)/best_percent)
+			n = int(len(self.gen)/(100/best_percent))
 			pairs = []
 			while len(pairs) < len(self.gen):
 				x = random.randint(0,n-1)
