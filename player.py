@@ -70,7 +70,7 @@ class Random_TreeAI(Player):
 		if self.tree == None:
 			self.tree = alphabeta.ABPruning_Tree(game, self.depth, self.low, self.up, self.heuristic, game.get_player_num() == 1)
 		else:
-			self.tree = self.tree.get_child_by_state(str(game))
+			self.tree = self.tree.get_child_tree_by_state(str(game))
 			self.tree.re_init(self.depth, self.low, self.up)
 		self.tree.search()
 		child_pair = self.tree.get_best_child_tuple()
