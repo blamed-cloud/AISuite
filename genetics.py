@@ -99,7 +99,7 @@ class Population(object):
 		for i in range(iterations):
 			if not quiet:
 				print "Iteration " + str(i)
-			self.gen.calc_fitness(self.game_class, num_games_first, depth, quiet)
+			self.gen.calc_fitness(num_games_first, depth, quiet)
 			n = int(len(self.gen)/best_percent)
 			pairs = []
 			while len(pairs) < len(self.gen):
