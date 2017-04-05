@@ -55,7 +55,7 @@ class RandomAI(Player):
 		
 		
 #random opponent with a tree. (hopefully won't lose to depth-move traps)
-class Random_TreeAI(player):
+class Random_TreeAI(Player):
 	def __init__(self, depth_lim = DEFAULT_DEPTH, upper_bound = UPPER_BOUND, lower_bound = LOWER_BOUND):
 		self.human = False
 		self.depth = depth_lim
