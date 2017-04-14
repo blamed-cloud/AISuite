@@ -19,14 +19,17 @@ class Generation(object):
 	def __len__(self):
 		return len(self.generation)
 		
-	def calc_fitness(self, num_games_first = 5, depth = 3, quiet = False):
+	def calc_fitness(self, num_games_first = 5, depth = 3, opponent = None, quiet = False):
 		org_num = 0
+		if opponent == None:
+			r_player = player.Random_TreeAI(depth)
+		else:
+			r_player = opponent
 		for org in self.generation:
 			org_num += 1
 			if not quiet:
 				print "organism number: " + str(org_num)
 			org_player = player.AI_ABPruning(org, depth_lim = depth)
-			r_player = player.Random_TreeAI(depth)
 			for x in range(num_games_first):
 				if not quiet:
 					print "    Game num: " + str(x)
@@ -79,6 +82,7 @@ class Population(object):
 		FILE = open(gen_file,'r')
 		self.gen = pickle.load(FILE)
 		FILE.close()
+		ancestry = [self.gen]
 		
 	def create_random_gen(self, example_org, gen_size = 100):
 		gen = Generation(self.game_class)
@@ -88,19 +92,21 @@ class Population(object):
 		
 	def load_random_gen(self, example_org, gen_size = 100):
 		self.set_gen(self.create_random_gen(example_org, gen_size))
+		ancestry = [self.gen]
 		
 	def set_gen(self, gen):
 		self.gen = gen
+		ancestry = [self.gen]
 		
 	def get_ancestry(self):
 		return self.ancestry
 		
-	def evolve(self, iterations = 10, best_percent = 10, num_games_first = 5, depth = 3, quiet = False):
+	def evolve(self, iterations = 10, best_percent = 10, num_games_first = 5, depth = 3, opponent = None, quiet = False):
 		for i in range(iterations):
 			if not quiet:
 				print "Iteration " + str(i)
-			self.gen.calc_fitness(num_games_first, depth, quiet)
-			n = int(len(self.gen)/(100/best_percent))
+			self.gen.calc_fitness(num_games_first, depth, opponent, quiet)
+			n = int(len(self.gen)/(100/float(best_percent)))
 			pairs = []
 			while len(pairs) < len(self.gen):
 				x = random.randint(0,n-1)
