@@ -4,6 +4,7 @@ from __future__ import print_function
 import sys
 import random
 import player
+import transpositions
 
 UPPER_BOUND = 100
 LOWER_BOUND = -100
@@ -52,6 +53,8 @@ class ABPruning_Tree(object):
 		self.is_max = i_am_max
 		self.have_children = False
 		
+		self.tpos_mngr = transpositions.Transposition_manager(3)
+		
 		self.choose_best_child = self.best_chance_selector
 		self.depth_sel = self.best_chance_sel
 		
@@ -99,6 +102,9 @@ class ABPruning_Tree(object):
 	def set_volatility_measure(self, vol):
 		self.is_volatile = vol
 		
+	def set_transposition_manager(self, tpm):
+		self.tpos_mngr = tpm
+		
 	def get_depth(self):
 		return self.depth_limit
 		
@@ -139,9 +145,21 @@ class ABPruning_Tree(object):
 		child = ABPruning_Tree(baby, self.depth_limit-1, self.alpha, self.beta, self.evaluate, baby.get_player_num() == 1)
 		child.set_volatility_measure(self.is_volatile)
 		child.set_child_selector(self.choose_best_child, self.depth_sel)
+		child.set_transposition_manager(self.tpos_mngr)
 		return child
 
+
 	def search(self):
+		search_tup = (0,0)
+		key = transpositions.Transposition_Key(self.game.parse_state(self.state), self.depth_limit, self.alpha, self.beta, self.is_max)
+		if key in self.tpos_mnger:
+			search_tup = self.tpos_mnger[key]
+		else:
+			search_tup = self._search()
+			self.tpos_mnger[key] = search_tup
+		return search_tup
+
+	def _search(self):
 		best_child_depth = 0
 		if (self.depth_limit <= 0 and not self.is_volatile(self.state)) or (self.depth_limit == VOLATILE_DEPTH) or self.is_terminal_node():
 			self.value = self.evaluate(self.state)

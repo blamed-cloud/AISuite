@@ -124,6 +124,16 @@ class Game(object):
 	def __str__(self):
 	### required by alphabeta.py ###
 		pass
+
+
+	#This method takes in a Game_State, and essentially factors out any information
+	#that wouldn't be known by an observer who only knows about the current state.
+	#So, for example, it either parses out the turn, or takes the turn mod 2.
+	#this new type of state will henceforth be known as a Transposition_State.
+	#parse_state : Game_State -> Transposition_State
+	@staticmethod
+	def parse_state(game_state):
+		pass
 			
 	#should return a list containing the possible game_states
 	#that could result from the current player doing their turn.
