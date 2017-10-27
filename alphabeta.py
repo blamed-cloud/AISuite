@@ -156,7 +156,7 @@ class ABPruning_Tree(object):
 			search_tup = self.tpos_mnger[key]
 		else:
 			search_tup = self._search()
-			self.tpos_mnger[key] = search_tup
+			self.tpos_mngr[key] = search_tup
 		return search_tup
 
 	def _search(self):
