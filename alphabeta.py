@@ -53,7 +53,7 @@ class ABPruning_Tree(object):
 		self.is_max = i_am_max
 		self.have_children = False
 		
-		self.tpos_mngr = transpositions.Transposition_manager(3)
+		self.tpos_mngr = transpositions.Transposition_Manager(3)
 		
 		self.choose_best_child = self.best_chance_selector
 		self.depth_sel = self.best_chance_sel
