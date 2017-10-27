@@ -64,7 +64,9 @@ class Transposition_Manager(object):
 				
 		if is_valid:
 			self.skipped_searches += 1
-			print "Number of Skipped Searches so far: " + str(self.skipped_searches)	
+			output = "Number of Skipped Searches so far: " + str(self.skipped_searches) + " ;"
+			output += "Size of this TM: " + str(len(self))
+			print output
 							
 		return is_valid
 		
