@@ -13,6 +13,7 @@ class Transposition_Key(object):
 		self.beta = _beta
 		self.max = _max
 
+
 class Transposition_Manager(object):
 	def __init__(self, strictness = 1):
 		self.searches = {}	# self.searches : (t_state, max) -> [depth, alpha, beta]
@@ -29,7 +30,7 @@ class Transposition_Manager(object):
 	
 	#returns False if:
 	#	search has never been done
-	#	or, the search parameters are more likely to give a better result.
+	#	or, the new search parameters are more likely to give a better result.
 	#returns True if:
 	#	search has been done before
 	#	and, the previously recorded search is more likely to be accurate.	
@@ -43,27 +44,38 @@ class Transposition_Manager(object):
 			raise TypeError
 		k = (key.t_state, key.max)
 		is_in = (k in searches)
+		if is_in:
+			search_params = searches[k]
 		is_valid = False
 		if is_in and self.search_strictness == 0:
 			is_valid = True
 		if is_in and self.search_strictness == 1:
-			if searches[k][0] >= key.depth:		#if the search we have on record is from higher up.
+			if search_params[0] >= key.depth:	#if the search we have on record is from higher up.
 				is_valid = True
 		if is_in and self.search_strictness == 2:
-			if searches[k][0] >= key.depth:
-				if searches[k][1] <= key.alpha or searches[k][2] >= key.beta:
+			if search_params[0] >= key.depth:
+				if search_params[1] <= key.alpha or search_params[2] >= key.beta:
 					is_valid = True
 		if is_in and self.search_strictness == 3:
-			if searches[k][0] >= key.depth:
-				if searches[k][1] <= key.alpha and searches[k][2] >= key.beta:
+			if search_params[0] >= key.depth:
+				if search_params[1] <= key.alpha and search_params[2] >= key.beta:
 					is_valid = True					
 		return is_valid
+		
 		
 	def __getitem__(self, key):
 		if key in self:
 			return results[(key.t_state, key.max)]
 		else:
 			raise KeyError
+		
+		
+	def get_search_params(self, key):
+		if key in self:
+			return searches[(key.t_state, key.max)]
+		else:
+			raise KeyError	
+		
 		
 	def __setitem__(self, key, value):
 		if not isinstance(key, Transposition_Key):
@@ -76,8 +88,10 @@ class Transposition_Manager(object):
 		searches[(key.t_state, key.max)] = [key.depth, key.alpha, key.beta]
 		results[(key.t_state, key.max)] = value
 		
+		
 	def __len__(self):
 		return len(results)
+		
 		
 	def get_strictness(self):
 		return self.search_strictness
