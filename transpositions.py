@@ -43,9 +43,9 @@ class Transposition_Manager(object):
 		if not isinstance(key, Transposition_Key):
 			raise TypeError
 		k = (key.t_state, key.max)
-		is_in = (k in searches)
+		is_in = (k in self.searches)
 		if is_in:
-			search_params = searches[k]
+			search_params = self.searches[k]
 		is_valid = False
 		if is_in and self.search_strictness == 0:
 			is_valid = True
@@ -65,14 +65,14 @@ class Transposition_Manager(object):
 		
 	def __getitem__(self, key):
 		if key in self:
-			return results[(key.t_state, key.max)]
+			return self.results[(key.t_state, key.max)]
 		else:
 			raise KeyError
 		
 		
 	def get_search_params(self, key):
 		if key in self:
-			return searches[(key.t_state, key.max)]
+			return self.searches[(key.t_state, key.max)]
 		else:
 			raise KeyError	
 		
@@ -85,12 +85,12 @@ class Transposition_Manager(object):
 		else:
 			if not isinstance(value[0], int) or not isinstance(value[1], int):
 				raise ValueError
-		searches[(key.t_state, key.max)] = [key.depth, key.alpha, key.beta]
-		results[(key.t_state, key.max)] = value
+		self.searches[(key.t_state, key.max)] = [key.depth, key.alpha, key.beta]
+		self.results[(key.t_state, key.max)] = value
 		
 		
 	def __len__(self):
-		return len(results)
+		return len(self.results)
 		
 		
 	def get_strictness(self):
