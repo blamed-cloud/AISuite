@@ -152,7 +152,7 @@ class ABPruning_Tree(object):
 	def search(self):
 		search_tup = (0,0)
 		key = transpositions.Transposition_Key(self.game.parse_state(self.state), self.depth_limit, self.alpha, self.beta, self.is_max)
-		if key in self.tpos_mnger:
+		if key in self.tpos_mngr:
 			search_tup = self.tpos_mnger[key]
 		else:
 			search_tup = self._search()
