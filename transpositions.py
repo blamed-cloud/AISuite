@@ -19,6 +19,7 @@ class Transposition_Manager(object):
 		self.searches = {}	# self.searches : (t_state, max) -> [depth, alpha, beta]
 		self.results = {}	# self.results : (t_state, max) -> (value, best_depth)
 		self.search_strictness = 1
+		self.skipped_searches = 0
 		if strictness in [0,1,2,3]:
 			self.search_strictness = strictness
 			# search_stricness	discretion
@@ -59,7 +60,12 @@ class Transposition_Manager(object):
 		if is_in and self.search_strictness == 3:
 			if search_params[0] >= key.depth:
 				if search_params[1] <= key.alpha and search_params[2] >= key.beta:
-					is_valid = True					
+					is_valid = True
+				
+		if is_valid:
+			self.skipped_searches += 1
+			print "Number of Skipped Searches so far: " + str(self.skipped_searches)	
+							
 		return is_valid
 		
 		
