@@ -19,7 +19,7 @@ class Transposition_Manager(object):
 		self.searches = {}	# self.searches : (t_state, max) -> [depth, alpha, beta]
 		self.results = {}	# self.results : (t_state, max) -> (value, best_depth)
 		self.search_strictness = 1
-		if strictness in [0,1,2,3]
+		if strictness in [0,1,2,3]:
 			self.search_strictness = strictness
 			# search_stricness	discretion
 			# 0			t_state, max
