@@ -133,7 +133,7 @@ class Game(object):
 	#parse_state : Game_State -> Transposition_State
 	@staticmethod
 	def parse_state(game_state):
-		pass
+		return game_state
 			
 	#should return a list containing the possible game_states
 	#that could result from the current player doing their turn.

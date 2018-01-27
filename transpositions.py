@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#alphabeta.py
+#transpositions.py
 
 #class to essentially memoize the search function of ABPruning_Tree.
 #basically list of tuples of (Transposition_State, depth, alpha, beta, value, best_child_depth)
