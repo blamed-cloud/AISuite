@@ -32,7 +32,7 @@ class MonteCarloTreeSearch(object):
 	def _selectChildState(self):
 		bestScore = 0.0
 		bestStates = []
-		scalar = math.sqrt(2.0)
+		scalar = 1 #math.sqrt(2.0)
 		for childState in self.child_states:
 			child = self.children[childState]
 			exploit = 0
@@ -60,8 +60,8 @@ class MonteCarloTreeSearch(object):
 
 	def _updateScores(self, result):
 		self.playouts += sum(result)
-		self.points += (1/2)*result[0] # should this be 1/numPlayers instead of 1/2 ?
-		self.points += result[self.game.get_player_num()]
+		self.points += 50*result[0] # should this be 100/numPlayers instead of 100/2 ?
+		self.points += 100*result[self.game.get_player_num()]
 
 	def search(self):
 		searchStartTime = time.time()
