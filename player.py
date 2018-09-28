@@ -140,7 +140,7 @@ class MCTS_Player(Player):
 		self.mcts.search()
 		stateMovePair = self.mcts.bestMove()
 		self.mcts = self.mcts.childByState(stateMovePair[0])
-		return childMovePair[1]
+		return stateMovePair[1]
 
 	def reset(self):
 		self.mcts = None
