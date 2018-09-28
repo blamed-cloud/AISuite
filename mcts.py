@@ -46,7 +46,7 @@ class MonteCarloTreeSearch(object):
 		self.points += result[self.game.get_player_num()]
 
 	def search(self):
-		searchStart = time.time()
+		searchStartTime = time.time()
 		while (time.time() - searchStartTime < self.turnTime):
 			self._selection() #calling _selection on self, no need to update scores
 
