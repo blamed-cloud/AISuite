@@ -138,6 +138,11 @@ class MCTS_Player(Player):
 		else:
 			self.mcts = self.mcts.childByState(str(game))
 		self.mcts.search()
+
+		# print number of visits (out of curiosity)
+		if not game.quiet:
+			print "Number of Visits: " + self.mcts.getVisits()
+
 		stateMovePair = self.mcts.bestMove()
 		self.mcts = self.mcts.childByState(stateMovePair[0])
 		return stateMovePair[1]

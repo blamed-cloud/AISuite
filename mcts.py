@@ -26,9 +26,27 @@ class MonteCarloTreeSearch(object):
 	def getPoints(self):
 		return self.points
 
+	def getVisits(self):
+		return self.playouts
+
 	def _selectChildState(self):
-		# TODO: implement actual selection metric
-		return random.choice(self.child_states)
+		bestScore = 0.0
+		bestStates = []
+		scalar = math.sqrt(2.0)
+		for childState in self.child_states:
+			child = self.children[childState]
+			exploit = 0
+			explore = 0
+			if child.getVisits() > 0:
+				exploit = child.getPoints()/child.getVisits()
+				explore = math.sqrt(2.0 * math.log(self.playouts)/float(child.getVisits()))
+			score = exploit + scalar * explore
+			if score == bestScore:
+				bestStates.append(childState)
+			elif score > bestScore:
+				bestStates = [childState]
+				bestScore = score
+		return random.choice(bestStates)
 
 	def _simulation(self, numGames = 1):
 		outcomes = [0,0,0]
