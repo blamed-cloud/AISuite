@@ -6,6 +6,7 @@ import alphabeta
 from alphabeta import DEFAULT_DEPTH
 from alphabeta import UPPER_BOUND
 from alphabeta import LOWER_BOUND
+from mcts import MonteCarloTreeSearch
 
 #base player class
 class Player(object):
@@ -13,22 +14,22 @@ class Player(object):
 		self.human = False
 
 	#method to determine if this player is a human
-	#is_human : Player -> Bool		
+	#is_human : Player -> Bool
 	def is_human(self):
 		return self.human
-		
+
 	#method to choose a move for the game.
 	#choose_move : Player x Game -> Move
 	def choose_move(self, game):
 		pass
-		
+
 	#method to reset the inner data of the player
 	#to be used if you want to play a new game for example
 	#reset : Player -> _
 	def reset(self):
 		pass
 
-		
+
 #basic class for a human player
 class Human(Player):
 	def __init__(self):
@@ -38,22 +39,22 @@ class Human(Player):
 	#uses terminal user input, may or may not be desirable
 	def choose_move(self, game):
 		return prgm_lib.get_str_escape_codes(game.escapes)
-		
+
 
 #basic class for a random opponent
 class RandomAI(Player):
 	def __init__(self):
 		self.human = False
-		
+
 	#chooses a random move from the possible moves it has this turn
 	def choose_move(self, game):
 		moves = game.get_child_moves()
 		return random.choice(moves)
-		
+
 	def reset(self):
 		random.seed()
-		
-		
+
+
 #random opponent with a tree. (hopefully won't lose to depth-move traps)
 class Random_TreeAI(Player):
 	def __init__(self, depth_lim = DEFAULT_DEPTH, upper_bound = UPPER_BOUND, lower_bound = LOWER_BOUND):
@@ -62,10 +63,10 @@ class Random_TreeAI(Player):
 		self.up = upper_bound
 		self.low = lower_bound
 		self.tree = None
-		
+
 	def heuristic(self, game_state):
 		return random.randint(self.low + 1, self.up - 1)
-		
+
 	def choose_move(self, game):
 		if self.tree == None:
 			self.tree = alphabeta.ABPruning_Tree(game, self.depth, self.low, self.up, self.heuristic, game.get_player_num() == 1)
@@ -96,16 +97,16 @@ class AI_ABPruning(Player):
 		self.sel_func = None
 		self.depth_sel = None
 		self.tree = None
-		
+
 	def set_volatility_func(self, vol):
 		self.set_vol = True
 		self.vol_func = vol
-		
+
 	def set_child_selector(self, selector, depth_selector):
 		self.set_sel = True
 		self.sel_func = selector
 		self.depth_sel = depth_selector
-	
+
 	def choose_move(self, game):
 		if self.tree == None:
 			self.tree = alphabeta.ABPruning_Tree(game, self.depth, self.low, self.up, self.heuristic, game.get_player_num() == 1)
@@ -120,8 +121,28 @@ class AI_ABPruning(Player):
 		child_pair = self.tree.get_best_child_tuple()
 		self.tree = self.tree.get_child_tree_by_state(child_pair[0])
 		return child_pair[1]
-		
+
 	def reset(self):
 		self.tree = None
 
 
+class MCTS_Player(Player):
+	def __init__(self, turnTime = 30):
+		self.turnTime = turnTime
+		self.human = False
+		self.mcts = None
+
+	def choose_move(self, game):
+		if self.mcts is None:
+			self.mcts = MonteCarloTreeSearch(game, self.turnTime)
+		else:
+			self.mcts = self.mcts.childByState(str(game))
+		self.mcts.search()
+		childMovePair = self.mcts.bestMove()
+		self.mcts = self.childByState()
+		stateMovePair = self.mcts.bestMove()
+		self.mcts = self.mcts.childByState(stateMovePair[0])
+		return childMovePair[1]
+
+	def reset(self):
+		self.mcts = None

@@ -3,7 +3,7 @@
 from __future__ import print_function
 import sys
 import random
-import player
+#import player # I don't think this is needed anymore
 import transpositions
 
 UPPER_BOUND = 100
@@ -22,14 +22,14 @@ def shallowest_first(best_child_list):
 	return random.choice(choices)
 shallowest_first.sel = max
 
-#function for returning randomly from the deepest best children	
+#function for returning randomly from the deepest best children
 def deepest_first(best_child_list):
 	max_depth = min([tup[2] for tup in best_child_list])	# min because depths start high and go to zero (or negative)
 	choices = [tup for tup in best_child_list if tup[2] == max_depth]
 	return random.choice(choices)
 deepest_first.sel = min
 
-#function to simply return randomly from any of the best children, ignoring depth	
+#function to simply return randomly from any of the best children, ignoring depth
 def ignore_depth(best_child_list):
 	return random.choice(best_child_list)
 ignore_depth.sel = lambda x: x[0]
@@ -52,18 +52,18 @@ class ABPruning_Tree(object):
 		self.value = 0
 		self.is_max = i_am_max
 		self.have_children = False
-		
+
 		self.tpos_mngr = transpositions.Transposition_Manager(3)
-		
+
 		self.choose_best_child = self.best_chance_selector
 		self.depth_sel = self.best_chance_sel
-		
+
 	def re_init(self, depth, A, B):
 		self.depth_limit = depth
 		self.alpha = A
 		self.beta = B
 		self.value = 0
-		
+
 	def best_chance_selector(self, best_child_list):
 		value = None
 		if self.is_max:
@@ -77,7 +77,7 @@ class ABPruning_Tree(object):
 			if self.value >= 0:
 				value = deepest_first(best_child_list)
 		return value
-		
+
 	def best_chance_sel(self, depth_list):
 		value = None
 		if self.is_max:
@@ -90,33 +90,33 @@ class ABPruning_Tree(object):
 				value = max(depth_list)
 			if self.value >= 0:
 				value = min(depth_list)
-		return value	
-		
+		return value
+
 	def set_heuristic(self, heuristic):
 		self.evaluate = heuristic
-		
+
 	def set_child_selector(self, selector, depth_selector):
 		self.choose_best_child = selector
 		self.depth_sel = depth_selector
-		
+
 	def set_volatility_measure(self, vol):
 		self.is_volatile = vol
-		
+
 	def set_transposition_manager(self, tpm):
 		self.tpos_mngr = tpm
-		
+
 	def get_depth(self):
 		return self.depth_limit
-		
+
 	def set_game(self, game):
 		self.game = game
-		
+
 	def set_children(self):
 		# self.child_moves = {}
 		# need to get the actual move so that we can return that, not the state.
 		self.child_moves = self.game.get_child_state2move_dict()
 		self.children = {x:None for x in self.game.get_child_states()}
-		
+
 	def get_child_tree_by_state(self, child_state):
 		t = self
 		if child_state in self.children:
@@ -127,10 +127,10 @@ class ABPruning_Tree(object):
 		else:
 			t = self.make_child_by_state(child_state)
 		return t
-		
+
 	def is_terminal_node(self):
 		return self.game.is_game_over()
-		
+
 	def get_best_child_tuple(self):
 		value = []
 		if len(self.best_child)==1:
@@ -138,8 +138,8 @@ class ABPruning_Tree(object):
 		else:
 			value = self.choose_best_child(self.best_child)
 		return value
-		
-	def make_child_by_state(self, child_state):	
+
+	def make_child_by_state(self, child_state):
 		baby = self.game.make_new_instance()
 		baby.load_state_from_string(child_state)
 		child = ABPruning_Tree(baby, self.depth_limit-1, self.alpha, self.beta, self.evaluate, baby.get_player_num() == 1)
