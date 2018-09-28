@@ -2,7 +2,7 @@
 #mcts.py
 import random
 import time
-
+import math
 
 class MonteCarloTreeSearch(object):
 	def __init__(self, game, simulationPlayerClass, turnTime = 30):
