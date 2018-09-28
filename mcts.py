@@ -40,6 +40,8 @@ class MonteCarloTreeSearch(object):
 			if child.getVisits() > 0:
 				exploit = child.getPoints()/child.getVisits()
 				explore = math.sqrt(2.0 * math.log(self.playouts)/float(child.getVisits()))
+			else:
+				return childState
 			score = exploit + scalar * explore
 			if score == bestScore:
 				bestStates.append(childState)
