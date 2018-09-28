@@ -138,8 +138,6 @@ class MCTS_Player(Player):
 		else:
 			self.mcts = self.mcts.childByState(str(game))
 		self.mcts.search()
-		childMovePair = self.mcts.bestMove()
-		self.mcts = self.childByState()
 		stateMovePair = self.mcts.bestMove()
 		self.mcts = self.mcts.childByState(stateMovePair[0])
 		return childMovePair[1]
