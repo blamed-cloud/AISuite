@@ -1,12 +1,11 @@
 #!/usr/bin/env python
 #mcts.py
 import random
-from player import RandomAI
 import time
 
 
 class MonteCarloTreeSearch(object):
-	def __init__(self, game, turnTime = 30):
+	def __init__(self, game, simulationPlayerClass, turnTime = 30):
 		self.game = game
 		self.state = str(game)
 		self.child_states = self.game.get_child_states()
@@ -15,13 +14,14 @@ class MonteCarloTreeSearch(object):
 		self.turnTime = turnTime
 		self.points = 0.0
 		self.playouts = 0
+		self.simulationClass = simulationPlayerClass
 
 	def _enumerateChildren(self):
 		self.children = {}
 		for childState in self.child_states:
 			child = self.game.make_new_instance()
 			child.load_state_from_string(childState)
-			self.children[childState] = MonteCarloTreeSearch(child, self.turnTime)
+			self.children[childState] = MonteCarloTreeSearch(child, self.simulationClass, self.turnTime)
 
 	def getPoints(self):
 		return self.points
@@ -35,7 +35,7 @@ class MonteCarloTreeSearch(object):
 		for i in range(numGames):
 			randomGame = self.game.make_new_instance()
 			randomGame.force_quiet()
-			randomGame.set_players([None, RandomAI(), RandomAI()])
+			randomGame.set_players([None, self.simulationClass(), self.simulationClass()])
 			winner = randomGame.play()
 			outcomes[winner] += 1
 		return outcomes

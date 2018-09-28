@@ -134,7 +134,7 @@ class MCTS_Player(Player):
 
 	def choose_move(self, game):
 		if self.mcts is None:
-			self.mcts = MonteCarloTreeSearch(game, self.turnTime)
+			self.mcts = MonteCarloTreeSearch(game, RandomAI, self.turnTime)
 		else:
 			self.mcts = self.mcts.childByState(str(game))
 		self.mcts.search()
