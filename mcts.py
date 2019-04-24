@@ -31,7 +31,7 @@ class MonteCarloTreeSearch(object):
 		return self.playouts
 
 	def _selectChildState(self):
-		bestScore = 0.0
+		bestScore = None
 		bestStates = []
 		scalar = 1 #math.sqrt(2.0)
 		for childState in self.child_states:
@@ -44,11 +44,11 @@ class MonteCarloTreeSearch(object):
 			else:
 				return childState
 			score = exploit + scalar * explore
-			if score == bestScore:
-				bestStates.append(childState)
-			elif score > bestScore:
+			if bestScore is None or score > bestScore:
 				bestStates = [childState]
 				bestScore = score
+			elif score == bestScore:
+				bestStates.append(childState)
 		return random.choice(bestStates)
 
 	def _simulation(self, numGames = 1):
