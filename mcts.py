@@ -5,8 +5,9 @@ import time
 import math
 
 class MonteCarloTreeSearch(object):
-	def __init__(self, game, simulationPlayerClass, turnTime = 30):
+	def __init__(self, game, simulationPlayerClass, playerNum, turnTime = 30):
 		self.game = game
+		self.playerNum = playerNum
 		self.state = str(game)
 		self.child_states = self.game.get_child_states()
 		self.children = None
@@ -21,7 +22,7 @@ class MonteCarloTreeSearch(object):
 		for childState in self.child_states:
 			child = self.game.make_new_instance()
 			child.load_state_from_string(childState)
-			self.children[childState] = MonteCarloTreeSearch(child, self.simulationClass, self.turnTime)
+			self.children[childState] = MonteCarloTreeSearch(child, self.simulationClass, self.playerNum, self.turnTime)
 
 	def getPoints(self):
 		return self.points
@@ -63,7 +64,7 @@ class MonteCarloTreeSearch(object):
 	def _updateScores(self, result):
 		self.playouts += sum(result)
 		self.points += 50*result[0] # should this be 100/numPlayers instead of 100/2 ?
-		self.points += 100*result[self.game.get_player_num()]
+		self.points += 100*result[self.playerNum]
 
 	def search(self):
 		searchStartTime = time.time()
