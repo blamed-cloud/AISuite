@@ -63,8 +63,17 @@ class MonteCarloTreeSearch(object):
 
 	def _updateScores(self, result):
 		self.playouts += sum(result)
-		self.points += 50*result[0] # should this be 100/numPlayers instead of 100/2 ?
-		self.points += 100*result[self.playerNum]
+		for i, numGames in enumerate(result[1:]):
+			if i == self.playerNum:
+				self.points += 100*numGames
+			else:
+				self.points -= 100*numGames
+		# should these be 100/numPlayers instead of 100/2 ?
+		# draw takes score toward 0
+		if self.points <= 0:
+			self.points += 50*result[0]
+		else:
+			self.points -= 50*result[0]
 
 	def search(self):
 		searchStartTime = time.time()
@@ -76,13 +85,13 @@ class MonteCarloTreeSearch(object):
 			if self.game.is_game_over():
 				winner = self.game.winner
 				outcome = [0,0,0]
-				outcome[winner] = 1
+				outcome[winner] = 25
 				self._updateScores(outcome)
 				return outcome
 			else:
 				self._enumerateChildren()
 				chosenChildState = self._selectChildState()
-				result = self.children[chosenChildState]._simulation()
+				result = self.children[chosenChildState]._simulation(3)
 				self.children[chosenChildState]._updateScores(result)
 				self._updateScores(result)
 				self.isLeaf = False
@@ -102,10 +111,13 @@ class MonteCarloTreeSearch(object):
 
 	def bestMove(self):
 		bestState = None
-		maxPoints = -1
+		maxPoints = None
 		for childState in self.child_states:
 			childPoints = self.children[childState].getPoints()
-			if childPoints > maxPoints:
+			if maxPoints is None:
+				bestState = childState
+				maxPoints = childPoints
+			elif childPoints > maxPoints:
 				bestState = childState
 				maxPoints = childPoints
 		bestMove = self.game.get_child_state2move_dict()[bestState]
