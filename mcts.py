@@ -63,7 +63,8 @@ class MonteCarloTreeSearch(object):
 
 	def _updateScores(self, result):
 		self.playouts += sum(result)
-		for i, numGames in enumerate(result[1:]):
+		for i in range(1,len(result)):
+			numGames = result[i]
 			if i == self.playerNum:
 				self.points += 100*numGames
 			else:
