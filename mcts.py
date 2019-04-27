@@ -104,11 +104,12 @@ class MonteCarloTreeSearch(object):
 			return result
 
 	def childByState(self, childState):
-		if self.children is not None:
-			if childState in self.children:
-				return self.children[childState]
+		if self.children is None:
+			self._enumerateChildren()
+		if childState in self.children:
+			return self.children[childState]
 		#something probably went wrong...
-		raise ValueError("in MonteCarloTreeSearch.childByState, childState did not exist!")
+		raise ValueError("in MonteCarloTreeSearch.childByState, childState did not exist:" + childState)
 
 	def bestMove(self):
 		bestState = None
